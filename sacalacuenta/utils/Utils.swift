@@ -6,3 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
+
+class Utils {
+    
+    func getFormattedDecimal(_ value: Double) -> String {
+        return String(format: "%.2f", value)
+    }
+    
+}
