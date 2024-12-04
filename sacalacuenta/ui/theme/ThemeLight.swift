@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
-struct Theme {
+struct ThemeLight {
+    static let primary: Color = Color("Purple80")
     
 }
