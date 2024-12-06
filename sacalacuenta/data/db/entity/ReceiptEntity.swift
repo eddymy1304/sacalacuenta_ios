@@ -12,17 +12,15 @@ import SwiftData
 class ReceiptEntity {
     @Attribute(.unique) var id: String = UUID().uuidString
     
-    var date: String
-    var dateTime: String
+    var date: Date
     var numberItems: Int
     var title: String
     var total: Double
     var paymentMethod: String
     
-    init(id: String, date: String, dateTime: String, numberItems: Int, title: String, total: Double, paymentMethod: String) {
+    init(id: String, date: Date, numberItems: Int, title: String, total: Double, paymentMethod: String) {
         self.id = id
         self.date = date
-        self.dateTime = dateTime
         self.numberItems = numberItems
         self.title = title
         self.total = total

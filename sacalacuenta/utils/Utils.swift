@@ -8,10 +8,30 @@
 import Foundation
 import SwiftUI
 
-class Utils {
+struct Utils {
     
-    func getFormattedDecimal(_ value: Double) -> String {
-        return String(format: "%.2f", value)
+    static func getFormattedDecimal(_ value: Double?) -> String {
+        if value == nil {
+            return ""
+        }
+        
+        return String(format: "%.2f", value!)
+    }
+    
+    static func formatDateToString(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        return formatter.string(from: date)
+    }
+    
+    static func formatDateToStringWithTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
+        return formatter.string(from: date)
+    }
+    
+    static func getCurrentDate() -> Date {
+        return Date()
     }
     
 }

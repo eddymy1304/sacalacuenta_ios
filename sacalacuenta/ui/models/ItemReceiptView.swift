@@ -5,12 +5,12 @@
 //  Created by Eddy Mendoza on 2/12/24.
 //
 
-import SwiftUI
+import Foundation
 
 struct ItemReceiptView : Identifiable {
     
-    var id: UUID = UUID()
-    var idReceipt: Int = -1
+    var id: String = UUID().uuidString
+    var idReceipt: String = ""
     var name: String = ""
     var amount: Double = 0.00
     var price: Double = 0.00

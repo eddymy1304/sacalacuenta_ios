@@ -11,15 +11,15 @@ import Foundation
 @Model
 class ReceiptDetEntity {
     @Attribute(.unique) var id: String = UUID().uuidString
-    var receiptId: String
+    var idReceipt: String
     var name: String
     var amount: Double?
     var price: Double?
     var total: Double
-    
-    init(id: String, receiptId: String, name: String, amount: Double? = nil, price: Double? = nil, total: Double) {
+  
+    init(id: String, idReceipt: String, name: String, amount: Double? = nil, price: Double? = nil, total: Double) {
         self.id = id
-        self.receiptId = receiptId
+        self.idReceipt = idReceipt
         self.name = name
         self.amount = amount
         self.price = price
