@@ -16,7 +16,7 @@ class ReceiptDetEntity {
     var amount: Double?
     var price: Double?
     var total: Double
-    
+  
     init(id: String, idReceipt: String, name: String, amount: Double? = nil, price: Double? = nil, total: Double) {
         self.id = id
         self.idReceipt = idReceipt
