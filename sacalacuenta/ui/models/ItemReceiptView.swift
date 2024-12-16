@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct ItemReceiptView : Identifiable {
+struct ItemReceiptView : Identifiable, Equatable, Hashable {
     
-    var id: UUID = UUID()
-    var idReceipt: Int = -1
+    var id: String = UUID().uuidString
+    var idReceipt: String = ""
     var name: String = ""
     var amount: Double = 0.00
     var price: Double = 0.00
@@ -18,7 +18,7 @@ struct ItemReceiptView : Identifiable {
     
     var textAmount: String = ""
     var textPrice: String = ""
-    var textTotal: String = ""
+    var textTotal: String = "0.00"
     
     var itemLocked: Bool = true
 }

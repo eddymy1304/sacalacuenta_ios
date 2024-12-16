@@ -13,7 +13,10 @@ struct ReceiptItem: View {
     
     var position: Int
     
+    @FocusState var focusedField: ReceiptScreen.FocusedFieldItem?
+    
     let onClickTrash: () -> Void
+    
     
     var body: some View {
         
@@ -26,10 +29,7 @@ struct ReceiptItem: View {
             
             HStack {
                 
-                VStack {
-                    Text(positionText)
-                    Spacer()
-                }
+                Text(positionText)
                 
                 VStack {
                     
@@ -40,19 +40,37 @@ struct ReceiptItem: View {
                             .onChange(of: item.name) { oldValue, newValue in
                                 item.name = newValue
                             }
-                            .padding(.horizontal, 16)
+                            .padding(.horizontal, .paddingLarge)
+                            .focused($focusedField, equals: .name(item.id))
                         
                         
                         let iconItemLocked = if(item.itemLocked){"lock"}
                         else {"lock.open"}
                         
-                        withAnimation{
-                            Image(systemName: iconItemLocked)
-                                .frame(width: 44, height: 44)
-                                .onTapGesture {
+                        Image(systemName: iconItemLocked)
+                            .frame(width: 44, height: 44)
+                            .onTapGesture {
+                                withAnimation{
                                     item.itemLocked.toggle()
                                 }
-                        }
+                                
+                                item.textAmount = ""
+                                item.textPrice = ""
+                                item.price = 0.00
+                                item.amount = 0.00
+                                item.total = 0.00
+                                item.textTotal = "0.00"
+                                
+                                if item.name.isEmpty {
+                                    focusedField = .name(item.id)
+                                } else {
+                                    if item.itemLocked {
+                                        focusedField = .total(item.id)
+                                    } else {
+                                        focusedField = .amount(item.id)
+                                    }
+                                }
+                            }
                         
                         Image(systemName: "trash")
                             .foregroundColor(.red)
@@ -71,57 +89,86 @@ struct ReceiptItem: View {
                             hint: "amount",
                             enabled: !item.itemLocked,
                             keyboardType: .decimalPad,
-                            onChange: { oldValue, newValue in
-                                item.textAmount = newValue
-                                item.amount =   Double(newValue) ?? 0.00
+                            onChange: { _, newValue in
+                                item.textAmount = filterTextToNumberDecimal(text: newValue)
+                                item.amount = Double(item.textAmount) ?? 0.00
+                                updateTotal()
                             }
                         )
+                        .focused($focusedField, equals: .amount(item.id))
                         
                         BasicOutlinedTextfield(
                             text: $item.textPrice,
                             hint: "price",
                             enabled: !item.itemLocked,
                             keyboardType: .decimalPad,
-                            onChange: { oldValue, newValue in
-                                item.textPrice = newValue
-                                item.price =   Double(newValue) ?? 0.00
+                            onChange: { _, newValue in
+                                item.textPrice = filterTextToNumberDecimal(text: newValue)
+                                item.price = Double(item.textPrice) ?? 0.00
+                                updateTotal()
                             }
                         )
+                        .focused($focusedField, equals: .price(item.id))
                         
                         BasicOutlinedTextfield(
                             text: $item.textTotal,
                             hint: "total",
                             enabled: item.itemLocked,
                             keyboardType: .decimalPad,
-                            onChange: { oldValue, newValue in
-                                item.textTotal = newValue
-                                item.total =   Double(newValue) ?? 0.00
+                            onChange: { _, newValue in
+                                item.textTotal = filterTextToNumberDecimal(text: newValue)
+                                item.total = Double(item.textTotal) ?? 0.00
                             }
                         )
+                        .focused($focusedField, equals: .total(item.id))
                         
                     }.padding(.horizontal, .paddingLarge)
                     
-                    Spacer()
-                }
+                    
+                }.padding(.vertical, .paddingNormal)
                 
             }
             
-            //Divider()
-            //  .frame(height: 2)
-            
-        }.frame(width: .infinity, height: 80)
+        }.frame(minHeight: 100)
+    }
+    
+    
+    func filterTextToNumberDecimal(text: String) -> String {
+        
+        let filter = text.filter { "0123456789.".contains($0) }
+        
+        if filter.components(separatedBy: ".").count > 2 {
+            return String(filter.dropLast())
+        } else {
+            return filter
+        }
+    }
+    
+    func updateTotal() {
+        item.total = getTotal(amount: item.amount, price: item.price)
+        item.textTotal = getTextTotal(total: item.total)
+    }
+    
+    func getTotal(amount: Double, price: Double)  -> Double {
+        return amount * price
+    }
+    
+    func getTextTotal(total: Double) -> String {
+        return String(format: NSLocalizedString("number_decimal", comment: ""), total)
     }
 }
 
 #Preview {
     
     @Previewable @State var item = ItemReceiptView(
-        name: "pollo",
+        name: "",
         amount: 1,
         price: 12.5
     )
     
-    ReceiptItem(item: $item, position: 1) {
+    @FocusState var focus: ReceiptScreen.FocusedFieldItem?
+    
+    ReceiptItem(item: $item, position: 1, focusedField: _focus) {
         
     }
 }

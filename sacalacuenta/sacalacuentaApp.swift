@@ -12,8 +12,11 @@ import SwiftData
 struct sacalacuentaApp: App {
 
     var body: some Scene {
+        
+        let viewmodel = ReceiptViewModel()
+        
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: viewmodel)
         }
     }
 }

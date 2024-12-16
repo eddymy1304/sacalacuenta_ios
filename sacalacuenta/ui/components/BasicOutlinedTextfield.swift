@@ -23,8 +23,11 @@ struct BasicOutlinedTextfield: View {
     
     
     var body: some View {
-        let lineWidth: CGFloat = if isFocused || !text.isEmpty{ .focusedBorderWidth }
-        else { .unfocusedBorderWidth }
+        
+        let lineWidth: CGFloat = withAnimation {
+            if isFocused || !text.isEmpty{ .focusedBorderWidth }
+            else { .unfocusedBorderWidth }
+        }
         
         let placeholder = if isFocused { "" } else { hint }
         
@@ -46,21 +49,22 @@ struct BasicOutlinedTextfield: View {
                             Color.gray,
                             lineWidth: lineWidth
                         )
-                    if (isFocused || !text.isEmpty) && !hint.isEmpty{
-                        withAnimation {
-                            Text(hint)
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .padding(.horizontal, .paddingSmall)
-                                .background(.white)
-                                .padding(.horizontal, .paddingNormal)
-                                .offset(y: -22)
-                                .scaleEffect(0.9, anchor: .leading)
-                        }
+                    
+                    if (isFocused || !text.isEmpty) && !hint.isEmpty {
+                        Text(hint)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .padding(.horizontal, .paddingSmall)
+                            .background(.white)
+                            .padding(.horizontal, .paddingNormal)
+                            .offset(y: -22)
+                            .scaleEffect(0.9, anchor: .leading)
                     }
+                    
                 }
                 
             }
+            .animation(.easeInOut, value: isFocused)
     }
 }
 

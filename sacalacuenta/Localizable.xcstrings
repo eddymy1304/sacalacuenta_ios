@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "aceptar" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accept"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        }
+      }
+    },
     "amount" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14,6 +31,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cantidad"
+          }
+        }
+      }
+    },
+    "cancelar" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        }
+      }
+    },
+    "dialog_save_receipt_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to save the receipt? Once saved, changes cannot be made."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Desea guardar el recibo? Una vez guardado, no se pueden realizar cambios."
+          }
+        }
+      }
+    },
+    "dialog_save_receipt_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save receipt"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar cuenta"
+          }
+        }
+      }
+    },
+    "error_empty_list" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add at least one product"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregar al menos un producto"
+          }
+        }
+      }
+    },
+    "error_payment_method" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Complete the payment method"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completar el método de pago"
+          }
+        }
+      }
+    },
+    "error_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Complete the receipt title"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completar el título de la cuenta"
           }
         }
       }
@@ -43,9 +162,14 @@
             "state" : "translated",
             "value" : "SacaLaCuenta"
           }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SacaLaCuenta"
+          }
         }
-      },
-      "shouldTranslate" : false
+      }
     },
     "number_decimal" : {
       "extractionState" : "manual",
@@ -217,23 +341,6 @@
         }
       }
     },
-    "title_cuenta" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Receipt"
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cuenta"
-          }
-        }
-      }
-    },
     "title_history" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -252,6 +359,7 @@
       }
     },
     "title_preview" : {
+      "comment" : "Preview",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -259,9 +367,31 @@
             "state" : "translated",
             "value" : "Preview"
           }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview"
+          }
         }
-      },
-      "shouldTranslate" : false
+      }
+    },
+    "title_receipt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receipt"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuenta"
+          }
+        }
+      }
     },
     "total" : {
       "extractionState" : "manual",
