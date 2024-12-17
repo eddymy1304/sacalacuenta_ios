@@ -9,12 +9,13 @@ protocol ReceiptRepository {
     
     func getListReceipt() async throws -> [ReceiptEntity]
     
-    func saveReceipt(receipt: ReceiptEntity, listDet: [ReceiptDetEntity])
+    func saveReceipt(receipt: ReceiptEntity, listDet: [ReceiptDetEntity]) async throws
     
-    func deleteReceipt(id: String)
+    func deleteReceipt(id: String) async throws
     
-    func getReceiptById(id: String)
+    func getReceiptById(id: String) async throws -> ReceiptEntity?
     
     func getListPaymentMethods() -> [PaymentMethod]
     
+    func getListReceiptDetById(id: String) async throws -> [ReceiptDetEntity]
 }

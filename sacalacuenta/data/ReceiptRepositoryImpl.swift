@@ -5,29 +5,63 @@
 //  Created by Eddy Mendoza on 6/12/24.
 //
 
+import SwiftData
+import Foundation
+
 class ReceiptRepositoryImpl: ReceiptRepository {
+    
+    private let context: ModelContext
+    
+    init(context: ModelContext) {
+        self.context = context
+    }
     
     func getListPaymentMethods() -> [PaymentMethod] {
         return getListPaymentMethodsRaw()
     }
     
-    
     func getListReceipt() async throws -> [ReceiptEntity] {
-        return []
+        return try context.fetch(FetchDescriptor<ReceiptEntity>())
     }
     
-    
-    func getListReceipt() {
+    func saveReceipt(receipt: ReceiptEntity, listDet: [ReceiptDetEntity]) async throws  {
+        
+        try context.transaction {
+            
+            context.insert(receipt)
+            
+            for det in listDet {
+                context.insert(det)
+            }
+        }
+        
+        try context.save()
     }
     
-    func saveReceipt(receipt: ReceiptEntity, listDet: [ReceiptDetEntity]) {
+    func deleteReceipt(id: String) async throws {
+        
+        let entity = try await getReceiptById(id: id)
+        
+        if entity != nil {
+            context.delete(entity!)
+        }
+        
+        try context.save()
     }
     
-    func deleteReceipt(id: String) {
+    func getReceiptById(id: String) async throws -> ReceiptEntity? {
+        
+        let fetchDescriptor = FetchDescriptor<ReceiptEntity>(
+            predicate: #Predicate{$0.id == id}
+        )
+        
+        return try context.fetch(fetchDescriptor).first
     }
     
-    func getReceiptById(id: String) {
+    func getListReceiptDetById(id: String) async throws -> [ReceiptDetEntity] {
+        let predicate = #Predicate<ReceiptDetEntity> { entity in
+            entity.idReceipt == id
+        }
+        return try context.fetch(FetchDescriptor(predicate: predicate))
     }
-    
-    
 }
