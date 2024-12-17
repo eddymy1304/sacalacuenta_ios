@@ -72,6 +72,8 @@ struct ContentView: View {
 }
 
 #Preview {
-    let viewmodel = ReceiptViewModel()
-    ContentView(viewModel: viewmodel)
+    let repository = ReceiptRepositoryImpl()
+    let useCase = GetPaymentMethodsUseCase(repository: repository)
+    let viewModel = ReceiptViewModel(getPaymentMethodsUseCase: useCase)
+    ContentView(viewModel: viewModel)
 }

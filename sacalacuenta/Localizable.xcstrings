@@ -137,6 +137,23 @@
         }
       }
     },
+    "error_total_zero" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The total of the receipt cannot be equal to zero"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El total del recibo no puede ser igual a cero"
+          }
+        }
+      }
+    },
     "fab_desc" : {
       "extractionState" : "manual",
       "localizations" : {

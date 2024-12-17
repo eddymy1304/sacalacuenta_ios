@@ -13,7 +13,11 @@ struct sacalacuentaApp: App {
 
     var body: some Scene {
         
-        let viewmodel = ReceiptViewModel()
+        let repository = ReceiptRepositoryImpl()
+        
+        let getPaymentMethodsUseCase = GetPaymentMethodsUseCase(repository: repository)
+        
+        let viewmodel = ReceiptViewModel(getPaymentMethodsUseCase: getPaymentMethodsUseCase)
         
         WindowGroup {
             ContentView(viewModel: viewmodel)

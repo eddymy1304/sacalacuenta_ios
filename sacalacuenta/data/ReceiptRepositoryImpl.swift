@@ -7,6 +7,11 @@
 
 class ReceiptRepositoryImpl: ReceiptRepository {
     
+    func getListPaymentMethods() -> [PaymentMethod] {
+        return getListPaymentMethodsRaw()
+    }
+    
+    
     func getListReceipt() async throws -> [ReceiptEntity] {
         return []
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReceiptItem: View {
     
-    @Binding var item: ItemReceiptView
+    @Binding var item: ReceiptDetView
     
     var position: Int
     
@@ -160,7 +160,7 @@ struct ReceiptItem: View {
 
 #Preview {
     
-    @Previewable @State var item = ItemReceiptView(
+    @Previewable @State var item = ReceiptDetView(
         name: "",
         amount: 1,
         price: 12.5

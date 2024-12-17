@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ItemReceiptView : Identifiable, Equatable, Hashable {
+struct ReceiptDetView : Identifiable, Equatable, Hashable {
     
     var id: String = UUID().uuidString
     var idReceipt: String = ""

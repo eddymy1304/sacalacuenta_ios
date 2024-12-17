@@ -12,15 +12,34 @@ import Combine
 class ReceiptViewModel: BaseViewModel {
     
     @Published var receipt: ReceiptView = ReceiptView()
-    @Published var listItems: [ItemReceiptView] = []
+    @Published var listItems: [ReceiptDetView] = []
+    
+    @Published private(set) var paymentMethods: [PaymentMethodView] = []
     
     @Published private(set) var showDialogSave: Bool = false
     
-    func addItem(item: ItemReceiptView) {
+    private let getPaymentMethodsUseCase : GetPaymentMethodsUseCase
+    
+    
+    init(getPaymentMethodsUseCase: GetPaymentMethodsUseCase) {
+        
+        self.getPaymentMethodsUseCase = getPaymentMethodsUseCase
+        
+        super.init()
+        
+        getPaymentMethods()
+        
+    }
+    
+    func getPaymentMethods() {
+        paymentMethods = getPaymentMethodsUseCase.execute()
+    }
+    
+    func addItem(item: ReceiptDetView) {
         listItems.append(item)
     }
     
-    func removeItem(item: ItemReceiptView) {
+    func removeItem(item: ReceiptDetView) {
         listItems.removeAll { $0 == item }
     }
     

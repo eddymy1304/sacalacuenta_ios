@@ -15,4 +15,6 @@ protocol ReceiptRepository {
     
     func getReceiptById(id: String)
     
+    func getListPaymentMethods() -> [PaymentMethod]
+    
 }

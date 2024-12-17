@@ -4,9 +4,10 @@
 //
 //  Created by Eddy Mendoza on 30/11/24.
 //
+import Foundation
 
 struct ReceiptView : Identifiable {
-    var id: Int = -1
+    var id: String = UUID().uuidString
     var date: String = ""
     var dateTime: String = ""
     var numberItems: Int = 0

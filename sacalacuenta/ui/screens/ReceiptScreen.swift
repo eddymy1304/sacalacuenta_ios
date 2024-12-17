@@ -21,64 +21,65 @@ struct ReceiptScreen: View {
     
     var body: some View {
         
-            VStack {
-                
-                ReceiptScreenHeader(
-                    receipt: $viewModel.receipt,
-                    total: viewModel.listItems.reduce(0) { $0 + $1.total }
-                )
-                
-                ReceiptScreenContent(
-                    list: $viewModel.listItems,
-                    focusedFieldItem: _focusedFieldItem
-                ) { item in
-                    viewModel.removeItem(item: item)
-                }
-                
-                ReceiptScreenFooter {
-                    viewModel.addItem(item: ItemReceiptView())
-                } onClickSave: {
-                    viewModel.preSaveReceipt()
-                }
-
+        VStack {
+            
+            ReceiptScreenHeader(
+                receipt: $viewModel.receipt,
+                total: viewModel.listItems.reduce(0) { $0 + $1.total },
+                paymentMethods: viewModel.paymentMethods
+            )
+            
+            ReceiptScreenContent(
+                list: $viewModel.listItems,
+                focusedFieldItem: _focusedFieldItem
+            ) { item in
+                viewModel.removeItem(item: item)
             }
             
+            ReceiptScreenFooter {
+                viewModel.addItem(item: ReceiptDetView())
+            } onClickSave: {
+                viewModel.preSaveReceipt()
+            }
+            
+        }
+        
     }
 }
 
 struct ReceiptScreenContent: View {
     
-    @Binding var list: [ItemReceiptView]
+    @Binding var list: [ReceiptDetView]
     
     @FocusState var focusedFieldItem: ReceiptScreen.FocusedFieldItem?
     
-    var onClickTrashItem : ( _ item: ItemReceiptView) -> Void
+    var onClickTrashItem : ( _ item: ReceiptDetView) -> Void
     
     var body: some View {
         ScrollViewReader { proxy in
-        
-        List(list.indices, id: \.self) { index in
             
-            ReceiptItem(
-                item: $list[index],
-                position: index,
-                focusedField: _focusedFieldItem
-            ) {
-                onClickTrashItem(list[index])
+            List(list.indices, id: \.self) { index in
+                
+                ReceiptItem(
+                    item: $list[index],
+                    position: index,
+                    focusedField: _focusedFieldItem
+                ) {
+                    onClickTrashItem(list[index])
+                }
+                .id(index)
+                
             }
-            .id(index)
-            
-        }
-        .listStyle(.plain)
-        .onChange(of: list) { _, newValue in
-            if let lastIndex = newValue.indices.last {
-                withAnimation {
-                    proxy.scrollTo(lastIndex, anchor: .bottom)
+            .listStyle(.plain)
+            .onChange(of: list) { _, newValue in
+                if let lastIndex = newValue.indices.last {
+                    withAnimation {
+                        proxy.scrollTo(lastIndex, anchor: .bottom)
+                    }
                 }
             }
+            
         }
-        
-    }
     }
 }
 
@@ -138,7 +139,10 @@ struct ReceiptScreenHeader: View {
     
     let total: Double
     
+    let paymentMethods: [PaymentMethodView]
+    
     var body: some View {
+        
         VStack {
             
             TextField("title", text: $receipt.title)
@@ -150,18 +154,44 @@ struct ReceiptScreenHeader: View {
                 .padding(.vertical, .paddingNormal)
             
             HStack {
-                TextField("payment_method", text: $receipt.paymentMethod)
-                    .font(.headline)
-                    .onChange(of: receipt.paymentMethod) { _, newValue in
-                        receipt.paymentMethod = newValue
+                    
+                    /*TextField("payment_method", text: $receipt.paymentMethod)
+                     .disabled(true)
+                     .font(.headline)
+                     .onChange(of: receipt.paymentMethod) { _, newValue in
+                     receipt.paymentMethod = newValue
+                     }
+                     .padding(.trailing, .paddingNormal)*/
+                    
+                    Menu {
+                        
+                        ForEach(paymentMethods) { item in
+                            Button(action: {receipt.paymentMethod = item.name}) {
+                                Text(NSLocalizedString(item.name, comment: ""))
+                            }
+                        }
+                        
+                    } label: {
+                        
+                        let text = if receipt.paymentMethod.isEmpty{
+                            "payment_method"
+                        } else {
+                            receipt.paymentMethod
+                        }
+                        
+                        Text(NSLocalizedString(text, comment: ""))
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.trailing, .paddingNormal)
+                    .font(.headline)
+                
                 
                 let totalText = String(format: NSLocalizedString("text_total", comment: ""),total)
                 
                 Text(totalText)
                     .lineLimit(1)
                     .font(.title2)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .padding(.horizontal, .paddingLarge)
             
@@ -170,6 +200,13 @@ struct ReceiptScreenHeader: View {
                 .padding(.horizontal, .paddingLarge)
         }
     }
+}
+
+#Preview("header") {
+    
+    @Previewable @State var receipt: ReceiptView = .init()
+    
+    ReceiptScreenHeader(receipt: $receipt, total: 0.00, paymentMethods: [])
 }
 
 struct DialogSaveReceipt : View {
@@ -192,6 +229,8 @@ struct DialogSaveReceipt : View {
 }
 
 #Preview {
-    let viewModel = ReceiptViewModel()
+    let repository = ReceiptRepositoryImpl()
+    let useCase = GetPaymentMethodsUseCase(repository: repository)
+    let viewModel = ReceiptViewModel(getPaymentMethodsUseCase: useCase)
     ReceiptScreen(viewModel: viewModel)
 }
