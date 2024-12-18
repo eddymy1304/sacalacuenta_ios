@@ -26,16 +26,28 @@ class ReceiptRepositoryImpl: ReceiptRepository {
     
     func saveReceipt(receipt: ReceiptEntity, listDet: [ReceiptDetEntity]) async throws  {
         
-        try context.transaction {
-            
-            context.insert(receipt)
-            
-            for det in listDet {
-                context.insert(det)
+        try await withCheckedThrowingContinuation { continuation in
+            Task { @MainActor in
+                do {
+                    
+                    try context.transaction {
+                        
+                        context.insert(receipt)
+                        
+                        for det in listDet {
+                            det.idReceipt = receipt.id
+                            context.insert(det)
+                        }
+                    }
+                    
+                    try context.save()
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
         }
         
-        try context.save()
     }
     
     func deleteReceipt(id: String) async throws {

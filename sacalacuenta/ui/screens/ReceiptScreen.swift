@@ -229,8 +229,15 @@ struct DialogSaveReceipt : View {
 }
 
 #Preview {
-    let repository = ReceiptRepositoryImpl()
+    
+    let context = DatabaseContainer().container.mainContext
+    
+    let repository = ReceiptRepositoryImpl(context: context)
     let useCase = GetPaymentMethodsUseCase(repository: repository)
-    let viewModel = ReceiptViewModel(getPaymentMethodsUseCase: useCase)
+    let useCase2 = SaveReceiptUseCase(repository: repository)
+    let viewModel = ReceiptViewModel(
+        getPaymentMethodsUseCase: useCase,
+        saveReceiptUseCase: useCase2
+    )
     ReceiptScreen(viewModel: viewModel)
 }

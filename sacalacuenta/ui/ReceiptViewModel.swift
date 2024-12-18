@@ -18,12 +18,17 @@ class ReceiptViewModel: BaseViewModel {
     
     @Published private(set) var showDialogSave: Bool = false
     
+    @Published private(set) var completeSave: Bool = false
+    
     private let getPaymentMethodsUseCase : GetPaymentMethodsUseCase
     
+    private let saveReceiptUseCase: SaveReceiptUseCase
     
-    init(getPaymentMethodsUseCase: GetPaymentMethodsUseCase) {
+    
+    init(getPaymentMethodsUseCase: GetPaymentMethodsUseCase, saveReceiptUseCase: SaveReceiptUseCase) {
         
         self.getPaymentMethodsUseCase = getPaymentMethodsUseCase
+        self.saveReceiptUseCase = saveReceiptUseCase
         
         super.init()
         
@@ -58,7 +63,22 @@ class ReceiptViewModel: BaseViewModel {
     }
     
     func saveReceipt() {
-        
+        Task {
+            
+            do {
+                try await saveReceiptUseCase.execute(receipt: self.receipt, listDet: self.listItems)
+                DispatchQueue.main.async {
+                    self.completeSave = true
+                    self.makeToast(text: "Receipt saved")
+                }
+            } catch {
+                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self.makeToast(text: "Error saving receipt")
+                }
+            }
+            
+        }
     }
     
     func validateReceipt() -> Bool {
