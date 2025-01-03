@@ -19,31 +19,48 @@ struct ReceiptScreen: View {
         case total(String)
     }
     
+    @State private var navToPreviewScreen = false
+    
+    @State private var id = ""
+    
     var body: some View {
-        
-        VStack {
-            
-            ReceiptScreenHeader(
-                receipt: $viewModel.receipt,
-                total: viewModel.listItems.reduce(0) { $0 + $1.total },
-                paymentMethods: viewModel.paymentMethods
-            )
-            
-            ReceiptScreenContent(
-                list: $viewModel.listItems,
-                focusedFieldItem: _focusedFieldItem
-            ) { item in
-                viewModel.removeItem(item: item)
+        NavigationStack{
+            VStack {
+                
+                ReceiptScreenHeader(
+                    receipt: $viewModel.receipt,
+                    total: viewModel.listItems.reduce(0) { $0 + $1.total },
+                    paymentMethods: viewModel.paymentMethods
+                )
+                
+                ReceiptScreenContent(
+                    list: $viewModel.listItems,
+                    focusedFieldItem: _focusedFieldItem
+                ) { item in
+                    viewModel.removeItem(item: item)
+                }
+                
+                ReceiptScreenFooter {
+                    viewModel.addItem(item: ReceiptDetView())
+                } onClickSave: {
+                    viewModel.preSaveReceipt()
+                }
+                
             }
-            
-            ReceiptScreenFooter {
-                viewModel.addItem(item: ReceiptDetView())
-            } onClickSave: {
-                viewModel.preSaveReceipt()
+            .onChange(of: viewModel.completeSave){ _, newValue in
+                if newValue {
+                    navToPreviewScreen = true
+                    id = viewModel.receipt.id
+                    viewModel.clearReceipt()
+                }
             }
-            
+            .navigationDestination(isPresented: $navToPreviewScreen) {
+                PreviewScreen(viewModel: viewModel, id: id)
+                    .onDisappear{
+                        viewModel.clearReceipt()
+                    }
+            }
         }
-        
     }
 }
 
@@ -154,36 +171,28 @@ struct ReceiptScreenHeader: View {
                 .padding(.vertical, .paddingNormal)
             
             HStack {
+                
+                Menu {
                     
-                    /*TextField("payment_method", text: $receipt.paymentMethod)
-                     .disabled(true)
-                     .font(.headline)
-                     .onChange(of: receipt.paymentMethod) { _, newValue in
-                     receipt.paymentMethod = newValue
-                     }
-                     .padding(.trailing, .paddingNormal)*/
-                    
-                    Menu {
-                        
-                        ForEach(paymentMethods) { item in
-                            Button(action: {receipt.paymentMethod = item.name}) {
-                                Text(NSLocalizedString(item.name, comment: ""))
-                            }
+                    ForEach(paymentMethods) { item in
+                        Button(action: {receipt.paymentMethod = item.name}) {
+                            Text(NSLocalizedString(item.name, comment: ""))
                         }
-                        
-                    } label: {
-                        
-                        let text = if receipt.paymentMethod.isEmpty{
-                            "payment_method"
-                        } else {
-                            receipt.paymentMethod
-                        }
-                        
-                        Text(NSLocalizedString(text, comment: ""))
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.trailing, .paddingNormal)
-                    .font(.headline)
+                    
+                } label: {
+                    
+                    let text = if receipt.paymentMethod.isEmpty{
+                        "payment_method"
+                    } else {
+                        receipt.paymentMethod
+                    }
+                    
+                    Text(NSLocalizedString(text, comment: ""))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.trailing, .paddingNormal)
+                .font(.headline)
                 
                 
                 let totalText = String(format: NSLocalizedString("text_total", comment: ""),total)
@@ -229,15 +238,6 @@ struct DialogSaveReceipt : View {
 }
 
 #Preview {
-    
-    let context = DatabaseContainer().container.mainContext
-    
-    let repository = ReceiptRepositoryImpl(context: context)
-    let useCase = GetPaymentMethodsUseCase(repository: repository)
-    let useCase2 = SaveReceiptUseCase(repository: repository)
-    let viewModel = ReceiptViewModel(
-        getPaymentMethodsUseCase: useCase,
-        saveReceiptUseCase: useCase2
-    )
+    let viewModel = diPreview()
     ReceiptScreen(viewModel: viewModel)
 }

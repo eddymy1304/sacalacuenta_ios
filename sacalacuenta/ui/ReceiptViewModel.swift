@@ -24,11 +24,16 @@ class ReceiptViewModel: BaseViewModel {
     
     private let saveReceiptUseCase: SaveReceiptUseCase
     
+    private let getReceiptWithListDetById : GetReceiptWithListDetById
     
-    init(getPaymentMethodsUseCase: GetPaymentMethodsUseCase, saveReceiptUseCase: SaveReceiptUseCase) {
+    init(getPaymentMethodsUseCase: GetPaymentMethodsUseCase,
+         saveReceiptUseCase: SaveReceiptUseCase,
+         getReceiptWithListDetById: GetReceiptWithListDetById
+    ) {
         
         self.getPaymentMethodsUseCase = getPaymentMethodsUseCase
         self.saveReceiptUseCase = saveReceiptUseCase
+        self.getReceiptWithListDetById = getReceiptWithListDetById
         
         super.init()
         
@@ -108,5 +113,35 @@ class ReceiptViewModel: BaseViewModel {
     
     func setShowDialogSave(show: Bool) {
         showDialogSave = show
+    }
+    
+    func getReceiptWithListDetById(id: String) {
+        Task {
+            
+            startLoading()
+            do {
+                let result = try await getReceiptWithListDetById.execute(id: id)
+                DispatchQueue.main.async {
+                    self.receipt = result.receipt
+                    self.listItems = result.listDet
+                }
+                stopLoading()
+            } catch {
+                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self.makeToast(text: "Error get receipt")
+                }
+                stopLoading()
+            }
+            
+            
+        }
+    }
+    
+    func clearReceipt() {
+        receipt = .init()
+        listItems.removeAll()
+        showDialogSave = false
+        completeSave = false
     }
 }

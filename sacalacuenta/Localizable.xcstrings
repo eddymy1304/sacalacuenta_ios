@@ -52,6 +52,40 @@
         }
       }
     },
+    "cant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amt"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cant"
+          }
+        }
+      }
+    },
+    "date_value" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date: %@"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Fecha: %@"
+          }
+        }
+      }
+    },
     "dialog_save_receipt_desc" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -188,6 +222,23 @@
         }
       }
     },
+    "name_value" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name: %@"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre: %@"
+          }
+        }
+      }
+    },
     "number_decimal" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -218,6 +269,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Método de pago"
+          }
+        }
+      }
+    },
+    "payment_method_value" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment Method: %@"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Método de pago: %@"
           }
         }
       }
@@ -273,6 +341,23 @@
         }
       }
     },
+    "pu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P.U"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P.U"
+          }
+        }
+      }
+    },
     "save" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -313,13 +398,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wellcome, %s."
+            "value" : "Wellcome, %@."
           }
         },
         "es-419" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bienvenido, %s."
+            "value" : "Bienvenido, %@."
           }
         }
       }

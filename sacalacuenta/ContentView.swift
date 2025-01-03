@@ -21,9 +21,7 @@ struct ContentView: View {
     var body: some View {
         
         let screens = getScreens(viewModel: viewModel)
-        
-        NavigationStack {
-            
+        NavigationStack { 
             VStack {
                 
                 TabView(selection: $selectedIndex) {
@@ -37,6 +35,7 @@ struct ContentView: View {
                                 Label(text,systemImage: screen.icon)
                             }
                             .tag(index)
+                        
                     }
                 }
             }
@@ -58,7 +57,6 @@ struct ContentView: View {
                         
                     }
                 }
-                
             }
             .overlay {
                 ToastView(toast: viewModel.toast)
@@ -72,15 +70,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    
-    let context = DatabaseContainer().container.mainContext
-    
-    let repository = ReceiptRepositoryImpl(context: context)
-    let useCase = GetPaymentMethodsUseCase(repository: repository)
-    let useCase2 = SaveReceiptUseCase(repository: repository)
-    let viewModel = ReceiptViewModel(
-        getPaymentMethodsUseCase: useCase,
-        saveReceiptUseCase: useCase2
-    )
+    let viewModel = diPreview()
     ContentView(viewModel: viewModel)
 }

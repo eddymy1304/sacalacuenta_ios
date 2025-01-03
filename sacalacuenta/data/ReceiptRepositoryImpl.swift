@@ -21,7 +21,16 @@ class ReceiptRepositoryImpl: ReceiptRepository {
     }
     
     func getListReceipt() async throws -> [ReceiptEntity] {
-        return try context.fetch(FetchDescriptor<ReceiptEntity>())
+        return try await withCheckedThrowingContinuation { continuation in
+            Task { @MainActor in
+                do {
+                    let entity = try context.fetch(FetchDescriptor<ReceiptEntity>())
+                    continuation.resume(returning: entity)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     func saveReceipt(receipt: ReceiptEntity, listDet: [ReceiptDetEntity]) async throws  {
@@ -67,13 +76,33 @@ class ReceiptRepositoryImpl: ReceiptRepository {
             predicate: #Predicate{$0.id == id}
         )
         
-        return try context.fetch(fetchDescriptor).first
+        return try await withCheckedThrowingContinuation { continuation in
+            Task { @MainActor in
+                do {
+                    let result =  try context.fetch(fetchDescriptor).first
+                    continuation.resume(returning:result)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     func getListReceiptDetById(id: String) async throws -> [ReceiptDetEntity] {
+        
         let predicate = #Predicate<ReceiptDetEntity> { entity in
             entity.idReceipt == id
         }
-        return try context.fetch(FetchDescriptor(predicate: predicate))
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            Task { @MainActor in
+                do {
+                    let result = try context.fetch(FetchDescriptor<ReceiptDetEntity>(predicate: predicate))
+                    continuation.resume(returning: result)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 }
